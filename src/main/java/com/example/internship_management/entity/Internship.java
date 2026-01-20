@@ -46,16 +46,32 @@ public class Internship {
 
     // --- Getters & Setters ---
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
+    
     public LocalDate getStartDate() { return startDate; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
+    
     public LocalDate getEndDate() { return endDate; }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+    
     public Student getStudent() { return student; }
     public void setStudent(Student student) { this.student = student; }
+    
     public Company getCompany() { return company; }
     public void setCompany(Company company) { this.company = company; }
+
+    // Alias getters/setters for REST API compatibility
+    public String getPosition() { 
+        return title; 
+    }
+    
+    public void setPosition(String position) { 
+        this.title = position; 
+    }
 }

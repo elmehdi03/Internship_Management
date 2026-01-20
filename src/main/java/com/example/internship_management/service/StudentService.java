@@ -45,4 +45,25 @@ public class StudentService {
     public void deleteStudent(Long id) {
         studentDAO.deleteById(id);
     }
+
+    // Alias methods for REST API compatibility
+    public List<Student> findAll() {
+        return getAllStudents();
+    }
+
+    public Student findById(Long id) {
+        return getStudentById(id).orElse(null);
+    }
+
+    public Student save(Student student) {
+        return studentDAO.save(student);
+    }
+
+    public Student update(Student student) {
+        return studentDAO.save(student);
+    }
+
+    public void delete(Long id) {
+        deleteStudent(id);
+    }
 }

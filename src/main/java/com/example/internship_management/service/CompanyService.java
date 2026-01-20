@@ -41,4 +41,25 @@ public class CompanyService {
     public void deleteCompany(Long id) {
         companyDAO.deleteById(id);
     }
+
+    // Alias methods for REST API compatibility
+    public List<Company> findAll() {
+        return getAllCompanies();
+    }
+
+    public Company findById(Long id) {
+        return getCompanyById(id).orElse(null);
+    }
+
+    public Company save(Company company) {
+        return companyDAO.save(company);
+    }
+
+    public Company update(Company company) {
+        return companyDAO.save(company);
+    }
+
+    public void delete(Long id) {
+        deleteCompany(id);
+    }
 }

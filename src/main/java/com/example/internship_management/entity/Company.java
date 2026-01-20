@@ -38,12 +38,34 @@ public class Company {
 
     // --- Getters & Setters ---
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
     public String getSector() { return sector; }
     public void setSector(String sector) { this.sector = sector; }
+
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }
+
     public List<Internship> getInternships() { return internships; }
     public void setInternships(List<Internship> internships) { this.internships = internships; }
+
+    // Alias getters/setters for REST API compatibility
+    public String getIndustry() {
+        return sector;
+    }
+
+    public void setIndustry(String industry) {
+        this.sector = industry;
+    }
+
+    public String getLocation() {
+        return city;
+    }
+
+    public void setLocation(String location) {
+        this.city = location;
+    }
 }

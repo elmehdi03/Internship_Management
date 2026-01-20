@@ -1,0 +1,2 @@
+create-jdbc-connection-pool --datasourceclassname com.mysql.cj.jdbc.MysqlDataSource --restype javax.sql.DataSource --property user=${ENV=DB_USER}:password=${ENV=DB_PASSWORD}:databaseName=${ENV=DB_NAME}:serverName=${ENV=DB_HOST}:portNumber=${ENV=DB_PORT}:useSSL=false:allowPublicKeyRetrieval=true:serverTimezone=UTC InternshipPool
+create-jdbc-resource --connectionpoolid InternshipPool jdbc/InternshipDS

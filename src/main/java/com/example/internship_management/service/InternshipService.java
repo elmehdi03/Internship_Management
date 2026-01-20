@@ -71,4 +71,25 @@ public class InternshipService {
     public void deleteInternship(Long id) {
         internshipDAO.deleteById(id);
     }
+
+    // Alias methods for REST API compatibility
+    public List<Internship> findAll() {
+        return getAllInternships();
+    }
+
+    public Internship findById(Long id) {
+        return getInternshipById(id).orElse(null);
+    }
+
+    public Internship save(Internship internship) {
+        return internshipDAO.save(internship);
+    }
+
+    public Internship update(Internship internship) {
+        return internshipDAO.save(internship);
+    }
+
+    public void delete(Long id) {
+        deleteInternship(id);
+    }
 }

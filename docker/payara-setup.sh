@@ -24,46 +24,59 @@ if [ $count -eq $max_tries ]; then
     exit 1
 fi
 
+# Create password file for asadmin
+echo "AS_ADMIN_PASSWORD=" > /tmp/pwdfile
+echo "AS_ADMIN_NEWPASSWORD=" >> /tmp/pwdfile
+
 # Démarrer Payara en arrière-plan
 echo "Démarrage de Payara Server..."
-${PAYARA_DIR}/bin/asadmin start-domain --verbose=false &
+${PAYARA_DIR}/bin/asadmin start-domain &
 PAYARA_PID=$!
 
-# Attendre que Payara soit prêt
+# Attendre que Payara soit prêt (check list-domains command)
 echo "Attente du démarrage de Payara..."
-sleep 15
+max_wait=60
+wait_count=0
+while [ $wait_count -lt $max_wait ]; do
+    if ${PAYARA_DIR}/bin/asadmin --passwordfile=/tmp/pwdfile list-domains 2>/dev/null | grep -q "running"; then
+        echo "✓ Payara est prêt!"
+        break
+    fi
+    wait_count=$((wait_count+1))
+    echo "Attente de Payara... $wait_count/$max_wait"
+    sleep 2
+done
 
-# Créer un fichier de mot de passe pour asadmin
-echo "AS_ADMIN_PASSWORD=" > /tmp/pwdfile
-chmod 600 /tmp/pwdfile
+# Additional wait for admin port to be fully ready
+sleep 5
 
 # Créer le pool de connexion JDBC
 echo "Configuration du pool de connexion MySQL..."
-${PAYARA_DIR}/bin/asadmin --user admin --passwordfile /tmp/pwdfile --host localhost --port 4848 create-jdbc-connection-pool \
+${PAYARA_DIR}/bin/asadmin --passwordfile=/tmp/pwdfile create-jdbc-connection-pool \
     --datasourceclassname com.mysql.cj.jdbc.MysqlDataSource \
     --restype javax.sql.DataSource \
     --property "serverName=${DB_HOST}:portNumber=${DB_PORT}:databaseName=${DB_NAME}:user=${DB_USER}:password=${DB_PASSWORD}:useSSL=false:allowPublicKeyRetrieval=true:serverTimezone=UTC" \
-    InternshipPool 2>/dev/null || echo "Pool déjà existant"
+    InternshipPool 2>/dev/null || echo "Pool déjà existant ou erreur"
 
-# Créer la ressource JDBC
+# Créer la ressource JDBC avec le bon nom JNDI
 echo "Configuration de la ressource JDBC..."
-${PAYARA_DIR}/bin/asadmin --user admin --passwordfile /tmp/pwdfile --host localhost --port 4848 create-jdbc-resource \
+${PAYARA_DIR}/bin/asadmin --passwordfile=/tmp/pwdfile create-jdbc-resource \
     --connectionpoolid InternshipPool \
-    java:jboss/datasources/InternshipDS 2>/dev/null || echo "Ressource déjà existante"
+    jdbc/InternshipDS 2>/dev/null || echo "Ressource déjà existante ou erreur"
 
 # Ping le pool pour vérifier la connexion
 echo "Test de la connexion à la base de données..."
-if ${PAYARA_DIR}/bin/asadmin --user admin --passwordfile /tmp/pwdfile --host localhost --port 4848 ping-connection-pool InternshipPool 2>/dev/null; then
+if ${PAYARA_DIR}/bin/asadmin --passwordfile=/tmp/pwdfile ping-connection-pool InternshipPool 2>/dev/null; then
     echo "✓ Connexion MySQL réussie!"
 else
     echo "⚠ Test de connexion a échoué mais continue..."
 fi
 
-echo "✓ Configuration terminée avec succès!"
+echo "✓ Configuration JDBC terminée!"
 
 # Déployer le WAR explicitement
 echo "Déploiement de l'application..."
-${PAYARA_DIR}/bin/asadmin --user admin --passwordfile /tmp/pwdfile --host localhost --port 4848 deploy \
+${PAYARA_DIR}/bin/asadmin --passwordfile=/tmp/pwdfile deploy \
     --force \
     --name Internship_Management \
     --contextroot Internship_Management-1.0-SNAPSHOT \
@@ -77,10 +90,9 @@ fi
 
 echo "✓ Application disponible sur http://localhost:8080/Internship_Management-1.0-SNAPSHOT/"
 
-# Nettoyer le fichier de mot de passe
+# Cleanup
 rm -f /tmp/pwdfile
 
 # Garder Payara en avant-plan
 echo "Payara fonctionne en mode production..."
-wait $PAYARA_PID
-
+tail -f ${PAYARA_DIR}/glassfish/domains/domain1/logs/server.log

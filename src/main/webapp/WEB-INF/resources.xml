@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <Resource id="jdbc/InternshipDS" type="DataSource">
+        JdbcDriver = com.mysql.cj.jdbc.Driver
+        JdbcUrl = jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC
+        UserName = ${DB_USER}
+        Password = ${DB_PASSWORD}
+        JtaManaged = true
+    </Resource>
+</resources>
+

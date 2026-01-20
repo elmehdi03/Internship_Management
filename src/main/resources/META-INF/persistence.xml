@@ -6,21 +6,16 @@
              version="3.0">
 
     <persistence-unit name="InternshipPU" transaction-type="JTA">
-        <!-- DataSource (facultative ici car on fournit directement les propriétés JDBC) -->
-        <jta-data-source>java:jboss/datasources/InternshipDS</jta-data-source>
+        <jta-data-source>jdbc/InternshipDS</jta-data-source>
 
         <properties>
-            <!-- Connexion directe à MySQL -->
-            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://db:3306/internship_management?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"/>
-            <property name="jakarta.persistence.jdbc.user" value="root"/>
-            <property name="jakarta.persistence.jdbc.password" value="root"/>
 
             <!-- Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.engine.transaction.jta.platform.internal.SunOneJtaPlatform"/>
         </properties>
     </persistence-unit>
 </persistence>
