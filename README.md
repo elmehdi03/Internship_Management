@@ -1,163 +1,239 @@
-# 🎓 Gestion des Stages - Application Jakarta EE
+# 🎓 Système de Gestion des Stages
 
-Application web de gestion des stages étudiants développée avec Jakarta EE 10, Hibernate et MySQL.
+Application web Jakarta EE pour la gestion des stages étudiants en entreprise.
+
+## 🎯 Objectifs
+
+- Gérer les étudiants, entreprises et stages
+- Fournir une interface web intuitive
+- Exposer une API REST pour l'intégration
+- Assurer la persistance des données avec JPA/Hibernate
 
 ## 🚀 Démarrage rapide
 
-### Prérequis
-- Docker Desktop installé et démarré
-- Java 17
-- Maven 3.9+
-
-### Lancement de l'application
-
-**Double-cliquez sur le fichier :**
-```
+**Lancer l'application :**
+```bash
 DEPLOYER.bat
 ```
 
-Ce script va :
-1. Arrêter les conteneurs existants
-2. Compiler le projet Maven
-3. Construire l'image Docker
-4. Démarrer les conteneurs
-5. Ouvrir automatiquement le navigateur
-
-**Ou manuellement :**
+Ou manuellement :
 ```bash
 mvn clean package -DskipTests
 docker-compose up --build -d
 ```
 
-### URLs
-
-| Service | URL |
-|---------|-----|
-| **Application** | http://localhost:8080/Internship_Management-1.0-SNAPSHOT/ |
-| **API REST** | http://localhost:8080/Internship_Management-1.0-SNAPSHOT/api/students |
-
-## 📊 Fonctionnalités
-
-### Interface Web
-- **Page d'accueil** : Vue d'ensemble avec statistiques
-- **Gestion des étudiants** : Liste de 20 étudiants
-- **Gestion des entreprises** : Liste de 15 entreprises  
-- **Gestion des stages** : Liste de 30 stages
-
-### API REST
-- `GET /api/students` - Liste des étudiants
-- `GET /api/companies` - Liste des entreprises
-- `GET /api/internships` - Liste des stages
-- `POST /api/students` - Créer un étudiant
-- `PUT /api/students/{id}` - Modifier un étudiant
-- `DELETE /api/students/{id}` - Supprimer un étudiant
+**Accès :**
+- Application web : http://localhost:8080/Internship_Management-1.0-SNAPSHOT/
+- API REST : http://localhost:8080/Internship_Management-1.0-SNAPSHOT/api/students
 
 ## 🛠️ Stack technique
 
-- **Backend** : Jakarta EE 10, Hibernate 6.4
-- **Serveur** : TomEE 10
-- **Base de données** : MySQL 8.0
-- **Build** : Maven 3.9
-- **Conteneurisation** : Docker & Docker Compose
+### Backend
+- **Jakarta EE 10** - Framework d'entreprise
+- **Hibernate 6.4** - ORM JPA
+- **CDI** - Injection de dépendances
+- **Bean Validation** - Validation des données
+- **JAX-RS** - API REST
 
-## 📁 Structure du projet
+### Serveur d'application
+- **TomEE 10 Plume** - Serveur Jakarta EE
+
+### Base de données
+- **MySQL 8.0** - SGBD relationnel
+- **HikariCP** - Pool de connexions
+
+### Build & Déploiement
+- **Maven 3.9** - Gestion de projet
+- **Docker & Docker Compose** - Conteneurisation
+
+## 🏗️ Architecture
+
+### Structure en couches
+
+```
+┌─────────────────────────────────────┐
+│     Couche Présentation (Web)       │
+│  - Servlets (students, companies)   │
+│  - JSP (vues)                        │
+│  - REST Resources                    │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│      Couche Service (Métier)        │
+│  - StudentService                   │
+│  - CompanyService                   │
+│  - InternshipService                │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│     Couche DAO (Accès données)      │
+│  - StudentDAO                       │
+│  - CompanyDAO                       │
+│  - InternshipDAO                    │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│      Base de données MySQL          │
+│  - Tables : student, company,       │
+│             internship              │
+└─────────────────────────────────────┘
+```
+
+### Modèle de données
+
+```
+Student (1) ──── (N) Internship (N) ──── (1) Company
+   │                     │                      │
+   ├─ id                 ├─ id                  ├─ id
+   ├─ firstName          ├─ title               ├─ name
+   ├─ lastName           ├─ startDate           ├─ sector
+   ├─ email              ├─ endDate             └─ city
+   └─ promotion          ├─ description
+                         ├─ student_id (FK)
+                         └─ company_id (FK)
+```
+
+## 📂 Structure du projet
 
 ```
 src/main/
-├── java/
-│   └── com/example/internship_management/
-│       ├── entity/         # Entités JPA
-│       ├── dao/            # Data Access Objects
-│       ├── service/        # Services métier
-│       ├── servlet/        # Servlets web
-│       └── rest/           # Endpoints REST
+├── java/.../internship_management/
+│   ├── entity/              # Entités JPA (@Entity)
+│   │   ├── Student.java
+│   │   ├── Company.java
+│   │   └── Internship.java
+│   │
+│   ├── dao/                 # Data Access Objects (@Stateless)
+│   │   ├── GenericDAO.java
+│   │   ├── StudentDAO.java
+│   │   ├── CompanyDAO.java
+│   │   └── InternshipDAO.java
+│   │
+│   ├── service/             # Services métier (@ApplicationScoped)
+│   │   ├── StudentService.java
+│   │   ├── CompanyService.java
+│   │   └── InternshipService.java
+│   │
+│   ├── servlet/             # Servlets web (@WebServlet)
+│   │   ├── StudentServlet.java
+│   │   ├── CompanyServlet.java
+│   │   └── InternshipServlet.java
+│   │
+│   └── rest/                # Endpoints REST (@Path)
+│       ├── JaxRsActivator.java
+│       ├── StudentResource.java
+│       ├── CompanyResource.java
+│       └── InternshipResource.java
+│
 ├── resources/
-│   ├── database.sql        # Script d'initialisation
+│   ├── database.sql         # Script d'initialisation
 │   └── META-INF/
-│       └── persistence.xml # Configuration JPA
+│       └── persistence.xml  # Configuration JPA
+│
 └── webapp/
-    ├── index.html          # Page d'accueil
-    ├── students.jsp        # Liste étudiants
-    ├── companies.jsp       # Liste entreprises
-    └── internships.jsp     # Liste stages
+    ├── index.html           # Page d'accueil
+    ├── students.jsp         # Liste des étudiants
+    ├── companies.jsp        # Liste des entreprises
+    ├── internships.jsp      # Liste des stages
+    └── WEB-INF/
+        ├── beans.xml        # Configuration CDI
+        └── resources.xml    # DataSource
 ```
+
+## 🔌 API REST
+
+### Endpoints disponibles
+
+**Students**
+- `GET    /api/students` - Liste tous les étudiants
+- `GET    /api/students/{id}` - Récupère un étudiant
+- `POST   /api/students` - Crée un étudiant
+- `PUT    /api/students/{id}` - Modifie un étudiant
+- `DELETE /api/students/{id}` - Supprime un étudiant
+
+**Companies**
+- `GET    /api/companies` - Liste toutes les entreprises
+- `GET    /api/companies/{id}` - Récupère une entreprise
+- `POST   /api/companies` - Crée une entreprise
+- `PUT    /api/companies/{id}` - Modifie une entreprise
+- `DELETE /api/companies/{id}` - Supprime une entreprise
+
+**Internships**
+- `GET    /api/internships` - Liste tous les stages
+- `GET    /api/internships/{id}` - Récupère un stage
+- `POST   /api/internships` - Crée un stage
+- `PUT    /api/internships/{id}` - Modifie un stage
+- `DELETE /api/internships/{id}` - Supprime un stage
+
+## 🧪 Données de test
+
+L'application est livrée avec des données de test :
+- **20 étudiants** (Master 1, Master 2, Licence 3)
+- **15 entreprises** (divers secteurs)
+- **30 stages** (6 mois chacun)
 
 ## 🔧 Commandes utiles
 
 ```bash
-# Démarrer l'application
+# Démarrer
 docker-compose up -d
 
-# Arrêter l'application
+# Arrêter
 docker-compose down
 
 # Voir les logs
 docker logs internship_management-app-1 -f
 
-# Redémarrer avec nouvelle base de données
+# Redémarrer avec nouvelle base
 docker-compose down -v
 docker-compose up --build -d
 
-# Compiler sans tests
+# Compiler
 mvn clean package -DskipTests
 ```
 
-## 💾 Base de données
+## 📊 Technologies & Patterns
 
-La base de données MySQL est automatiquement créée et peuplée au démarrage avec :
-- 20 étudiants
-- 15 entreprises
-- 30 stages
+### Design Patterns utilisés
+- **DAO Pattern** - Séparation de la logique d'accès aux données
+- **Service Layer** - Encapsulation de la logique métier
+- **Dependency Injection** - Couplage faible via CDI
+- **Repository Pattern** - Abstraction de la persistance
+- **MVC** - Séparation Model-View-Controller
 
-**Connexion MySQL :**
-- Host: `localhost:3307`
-- Database: `internship_management`
-- User: `root`
-- Password: `root`
+### Annotations clés
+- `@Entity` - Entités JPA
+- `@Stateless` - EJB sans état
+- `@ApplicationScoped` - Bean CDI singleton
+- `@WebServlet` - Servlet HTTP
+- `@Path` - Endpoint REST
+- `@Transactional` - Gestion des transactions
 
-## 📝 Développement
+## 🌐 Configuration
 
-### Modifier le code
-1. Modifier les fichiers Java dans `src/main/java/`
-2. Recompiler : `mvn package -DskipTests`
-3. Redémarrer : `docker-compose restart app`
-
-### Ajouter des données
-Modifier le fichier `src/main/resources/database.sql` puis redémarrer avec :
-```bash
-docker-compose down -v
-docker-compose up --build -d
+### Base de données (docker-compose.yml)
+```yaml
+MySQL 8.0
+- Port : 3307
+- Database : internship_management
+- User : root
+- Password : root
 ```
 
-## 🐛 Dépannage
-
-### L'application ne démarre pas
-```bash
-# Vérifier que Docker est actif
-docker ps
-
-# Consulter les logs
-docker logs internship_management-app-1
-
-# Redémarrer complètement
-docker-compose down -v
-docker-compose up --build -d
+### Serveur d'application
+```yaml
+TomEE 10
+- Port : 8080
+- Context : /Internship_Management-1.0-SNAPSHOT
 ```
 
-### Erreur "port already in use"
-```bash
-# Libérer le port 8080
-netstat -ano | findstr :8080
-# Tuer le processus ou changer le port dans docker-compose.yml
-```
+## 📝 Licence
 
-## 📄 Licence
-
-Projet académique - Gestion des stages étudiants
+Projet académique - Formation Jakarta EE
 
 ---
 
-**Développé avec Jakarta EE 10 | TomEE 10 | MySQL 8.0 | Docker**
+**Stack** : Jakarta EE 10 • Hibernate 6.4 • MySQL 8.0 • TomEE 10 • Docker
 
 Application Jakarta EE 10 de gestion de stages avec JPA/Hibernate et MySQL, entièrement dockerisée.
 
