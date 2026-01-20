@@ -1,4 +1,163 @@
-# 🎓 Internship Management Application
+# 🎓 Gestion des Stages - Application Jakarta EE
+
+Application web de gestion des stages étudiants développée avec Jakarta EE 10, Hibernate et MySQL.
+
+## 🚀 Démarrage rapide
+
+### Prérequis
+- Docker Desktop installé et démarré
+- Java 17
+- Maven 3.9+
+
+### Lancement de l'application
+
+**Double-cliquez sur le fichier :**
+```
+DEPLOYER.bat
+```
+
+Ce script va :
+1. Arrêter les conteneurs existants
+2. Compiler le projet Maven
+3. Construire l'image Docker
+4. Démarrer les conteneurs
+5. Ouvrir automatiquement le navigateur
+
+**Ou manuellement :**
+```bash
+mvn clean package -DskipTests
+docker-compose up --build -d
+```
+
+### URLs
+
+| Service | URL |
+|---------|-----|
+| **Application** | http://localhost:8080/Internship_Management-1.0-SNAPSHOT/ |
+| **API REST** | http://localhost:8080/Internship_Management-1.0-SNAPSHOT/api/students |
+
+## 📊 Fonctionnalités
+
+### Interface Web
+- **Page d'accueil** : Vue d'ensemble avec statistiques
+- **Gestion des étudiants** : Liste de 20 étudiants
+- **Gestion des entreprises** : Liste de 15 entreprises  
+- **Gestion des stages** : Liste de 30 stages
+
+### API REST
+- `GET /api/students` - Liste des étudiants
+- `GET /api/companies` - Liste des entreprises
+- `GET /api/internships` - Liste des stages
+- `POST /api/students` - Créer un étudiant
+- `PUT /api/students/{id}` - Modifier un étudiant
+- `DELETE /api/students/{id}` - Supprimer un étudiant
+
+## 🛠️ Stack technique
+
+- **Backend** : Jakarta EE 10, Hibernate 6.4
+- **Serveur** : TomEE 10
+- **Base de données** : MySQL 8.0
+- **Build** : Maven 3.9
+- **Conteneurisation** : Docker & Docker Compose
+
+## 📁 Structure du projet
+
+```
+src/main/
+├── java/
+│   └── com/example/internship_management/
+│       ├── entity/         # Entités JPA
+│       ├── dao/            # Data Access Objects
+│       ├── service/        # Services métier
+│       ├── servlet/        # Servlets web
+│       └── rest/           # Endpoints REST
+├── resources/
+│   ├── database.sql        # Script d'initialisation
+│   └── META-INF/
+│       └── persistence.xml # Configuration JPA
+└── webapp/
+    ├── index.html          # Page d'accueil
+    ├── students.jsp        # Liste étudiants
+    ├── companies.jsp       # Liste entreprises
+    └── internships.jsp     # Liste stages
+```
+
+## 🔧 Commandes utiles
+
+```bash
+# Démarrer l'application
+docker-compose up -d
+
+# Arrêter l'application
+docker-compose down
+
+# Voir les logs
+docker logs internship_management-app-1 -f
+
+# Redémarrer avec nouvelle base de données
+docker-compose down -v
+docker-compose up --build -d
+
+# Compiler sans tests
+mvn clean package -DskipTests
+```
+
+## 💾 Base de données
+
+La base de données MySQL est automatiquement créée et peuplée au démarrage avec :
+- 20 étudiants
+- 15 entreprises
+- 30 stages
+
+**Connexion MySQL :**
+- Host: `localhost:3307`
+- Database: `internship_management`
+- User: `root`
+- Password: `root`
+
+## 📝 Développement
+
+### Modifier le code
+1. Modifier les fichiers Java dans `src/main/java/`
+2. Recompiler : `mvn package -DskipTests`
+3. Redémarrer : `docker-compose restart app`
+
+### Ajouter des données
+Modifier le fichier `src/main/resources/database.sql` puis redémarrer avec :
+```bash
+docker-compose down -v
+docker-compose up --build -d
+```
+
+## 🐛 Dépannage
+
+### L'application ne démarre pas
+```bash
+# Vérifier que Docker est actif
+docker ps
+
+# Consulter les logs
+docker logs internship_management-app-1
+
+# Redémarrer complètement
+docker-compose down -v
+docker-compose up --build -d
+```
+
+### Erreur "port already in use"
+```bash
+# Libérer le port 8080
+netstat -ano | findstr :8080
+# Tuer le processus ou changer le port dans docker-compose.yml
+```
+
+## 📄 Licence
+
+Projet académique - Gestion des stages étudiants
+
+---
+
+**Développé avec Jakarta EE 10 | TomEE 10 | MySQL 8.0 | Docker**
 
 Application Jakarta EE 10 de gestion de stages avec JPA/Hibernate et MySQL, entièrement dockerisée.
 

@@ -1,5 +1,6 @@
 package com.example.internship_management.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class Student {
     @Column(length = 50)
     private String promotion;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Internship> internships = new ArrayList<>();
 

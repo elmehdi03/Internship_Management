@@ -1,1 +1,94 @@
-
+﻿-- Création des tables
+CREATE TABLE IF NOT EXISTS student (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    promotion VARCHAR(50) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS company (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    sector VARCHAR(100) NOT NULL,
+    city VARCHAR(100) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS internship (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    description TEXT,
+    student_id BIGINT,
+    company_id BIGINT,
+    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
+    FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE
+);
+-- Insertion des données de test
+INSERT INTO student (first_name, last_name, email, promotion) VALUES
+('Jean', 'Dupont', 'jean.dupont@example.com', 'Master 1'),
+('Marie', 'Martin', 'marie.martin@example.com', 'Master 2'),
+('Pierre', 'Bernard', 'pierre.bernard@example.com', 'Licence 3'),
+('Sophie', 'Dubois', 'sophie.dubois@example.com', 'Master 1'),
+('Luc', 'Lambert', 'luc.lambert@example.com', 'Master 2'),
+('Emma', 'Rousseau', 'emma.rousseau@example.com', 'Licence 3'),
+('Thomas', 'Simon', 'thomas.simon@example.com', 'Master 1'),
+('Julie', 'Laurent', 'julie.laurent@example.com', 'Master 2'),
+('Nicolas', 'Lefevre', 'nicolas.lefevre@example.com', 'Licence 3'),
+('Camille', 'Moreau', 'camille.moreau@example.com', 'Master 1'),
+('Antoine', 'Girard', 'antoine.girard@example.com', 'Master 2'),
+('Claire', 'Petit', 'claire.petit@example.com', 'Licence 3'),
+('Maxime', 'Mercier', 'maxime.mercier@example.com', 'Master 1'),
+('Laura', 'Blanc', 'laura.blanc@example.com', 'Master 2'),
+('Alexandre', 'Garnier', 'alexandre.garnier@example.com', 'Licence 3'),
+('Pauline', 'Faure', 'pauline.faure@example.com', 'Master 1'),
+('Vincent', 'Andre', 'vincent.andre@example.com', 'Master 2'),
+('Isabelle', 'Roux', 'isabelle.roux@example.com', 'Licence 3'),
+('Julien', 'Perrin', 'julien.perrin@example.com', 'Master 1'),
+('Sarah', 'Morel', 'sarah.morel@example.com', 'Master 2');
+INSERT INTO company (name, sector, city) VALUES
+('TechCorp', 'Informatique', 'Paris'),
+('InnovateTech', 'Technologies', 'Lyon'),
+('DataScience SA', 'Big Data', 'Marseille'),
+('CloudSystems', 'Cloud Computing', 'Toulouse'),
+('CyberSecure', 'Cybersécurité', 'Nantes'),
+('AICompany', 'Intelligence Artificielle', 'Bordeaux'),
+('WebDev Inc', 'Développement Web', 'Nice'),
+('MobileSoft', 'Applications Mobiles', 'Strasbourg'),
+('GameStudio', 'Jeux Vidéo', 'Rennes'),
+('FinTech Solutions', 'Finance', 'Lille'),
+('HealthTech', 'Santé', 'Paris'),
+('GreenEnergy', 'Energie', 'Lyon'),
+('AutoTech', 'Automobile', 'Marseille'),
+('RetailPro', 'Commerce', 'Toulouse'),
+('EduTech', 'Education', 'Nantes');
+INSERT INTO internship (title, start_date, end_date, description, student_id, company_id) VALUES
+('Développeur Full Stack', '2026-02-01', '2026-07-31', 'Développement applications web', 1, 1),
+('Data Analyst', '2026-03-01', '2026-08-31', 'Analyse de données', 2, 3),
+('DevOps Engineer', '2026-02-15', '2026-08-15', 'CI/CD et infrastructure cloud', 3, 4),
+('Consultant Cybersécurité', '2026-04-01', '2026-09-30', 'Audit de sécurité', 4, 5),
+('Développeur IA', '2026-03-15', '2026-09-15', 'Machine learning', 5, 6),
+('Designer UX/UI', '2026-02-01', '2026-07-31', 'Conception interfaces', 6, 7),
+('Développeur Mobile iOS', '2026-05-01', '2026-10-31', 'Apps iOS natives', 7, 8),
+('Game Developer', '2026-03-01', '2026-08-31', 'Jeux avec Unity', 8, 9),
+('Analyste Financier', '2026-02-15', '2026-08-15', 'Outils FinTech', 9, 10),
+('Consultant Santé', '2026-04-01', '2026-09-30', 'Solutions e-santé', 10, 11),
+('Ingénieur Energie', '2026-03-15', '2026-09-15', 'Energies renouvelables', 11, 12),
+('Développeur Backend', '2026-02-01', '2026-07-31', 'API REST Java', 12, 1),
+('Data Scientist', '2026-05-01', '2026-10-31', 'Deep learning', 13, 3),
+('Architecte Cloud', '2026-03-01', '2026-08-31', 'Solutions AWS/Azure', 14, 4),
+('Ingénieur Sécurité', '2026-02-15', '2026-08-15', 'Sécurisation IT', 15, 5),
+('Chef de Projet IT', '2026-04-01', '2026-09-30', 'Gestion projets', 16, 2),
+('Développeur Frontend', '2026-03-15', '2026-09-15', 'Vue.js', 17, 7),
+('QA Engineer', '2026-02-01', '2026-07-31', 'Tests automatisés', 18, 8),
+('Business Analyst', '2026-05-01', '2026-10-31', 'Analyse besoins', 19, 14),
+('Product Owner', '2026-03-01', '2026-08-31', 'Gestion produit', 20, 15),
+('Consultant Digital', '2026-02-15', '2026-08-15', 'Transformation digitale', 1, 2),
+('Développeur Python', '2026-04-01', '2026-09-30', 'Python Django', 2, 6),
+('Ingénieur Réseau', '2026-03-15', '2026-09-15', 'Admin réseaux', 3, 5),
+('Analyste Système', '2026-02-01', '2026-07-31', 'Optimisation SI', 4, 1),
+('Développeur JavaScript', '2026-05-01', '2026-10-31', 'Node.js', 5, 7),
+('Consultant ERP', '2026-03-01', '2026-08-31', 'Solutions ERP', 6, 14),
+('Développeur Android', '2026-02-15', '2026-08-15', 'Apps Android', 7, 8),
+('Technical Writer', '2026-04-01', '2026-09-30', 'Documentation', 8, 2),
+('Scrum Master', '2026-03-15', '2026-09-15', 'Méthodes agiles', 9, 1),
+('Ingénieur IoT', '2026-02-01', '2026-07-31', 'Internet des Objets', 10, 12);

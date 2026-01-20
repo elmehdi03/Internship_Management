@@ -112,10 +112,12 @@
             background: white;
             border-radius: 10px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .info-item:hover {
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(5px);
         }
 
         .info-icon {
@@ -219,15 +221,15 @@
         <p class="subtitle">Système de gestion des stages étudiants</p>
 
         <div class="stats">
-            <div class="stat-card">
+            <div class="stat-card" style="cursor: pointer;" onclick="window.location.href='students';">
                 <div class="stat-number">20</div>
                 <div class="stat-label">Étudiants</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="cursor: pointer;" onclick="window.location.href='companies';">
                 <div class="stat-number">15</div>
                 <div class="stat-label">Entreprises</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="cursor: pointer;" onclick="window.location.href='internships';">
                 <div class="stat-number">30</div>
                 <div class="stat-label">Stages</div>
             </div>
@@ -236,21 +238,21 @@
         <div class="info-section">
             <h2>📊 Services Disponibles</h2>
             <div class="info-grid">
-                <div class="info-item">
+                <div class="info-item" style="cursor: pointer;" onclick="window.location.href='students';">
                     <div class="info-icon">👨‍🎓</div>
                     <div class="info-content">
                         <div class="info-title">StudentService</div>
                         <div class="info-desc">Gestion des étudiants : création, modification, consultation</div>
                     </div>
                 </div>
-                <div class="info-item">
+                <div class="info-item" style="cursor: pointer;" onclick="window.location.href='companies';">
                     <div class="info-icon">🏢</div>
                     <div class="info-content">
                         <div class="info-title">CompanyService</div>
                         <div class="info-desc">Gestion des entreprises partenaires</div>
                     </div>
                 </div>
-                <div class="info-item">
+                <div class="info-item" style="cursor: pointer;" onclick="window.location.href='internships';">
                     <div class="info-icon">💼</div>
                     <div class="info-content">
                         <div class="info-title">InternshipService</div>
